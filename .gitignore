@@ -1,0 +1,6 @@
+# Local secrets — never commit
+.env
+
+# OpenClaw runtime state (mounted into containers)
+.openclaw/
+.openclaw-auth/

@@ -16,25 +16,40 @@ Upstream project: https://github.com/openclaw/openclaw
 Experiments with running OpenClaw in a Docker Compose sandbox. Nothing here is meant for production.
 
 ```
-compose.yaml   # Docker Compose stack (openclaw-gateway + openclaw-cli)
-Makefile       # Convenience targets
-.env           # NOT committed — local secrets only
+compose.yaml    # Docker Compose stack (openclaw-gateway + openclaw-cli)
+.env.example    # Template — copy to .env and fill in your secrets
+Makefile        # Convenience targets
+.gitignore      # Keeps .env and runtime state out of git
 ```
 
 ## Quick start
 
 ```bash
-# 1. Copy the upstream env template and fill in your keys
-curl -o .env https://raw.githubusercontent.com/openclaw/openclaw/main/.env.example
+# 1. Copy the env template and fill in at least one LLM key and one channel token
+cp .env.example .env
 
-# 2. Start the gateway
+# 2. Pull the image and start the gateway
+make pull
 make up
 
-# 3. Open an interactive CLI session
-docker compose run --rm openclaw-cli
+# 3. Open the web UI
+open http://localhost:18789
+
+# 4. Or drop into an interactive CLI session
+make cli
 ```
 
-The gateway will be available at `http://localhost:18789`.
+### Makefile targets
+
+| Target | What it does |
+|---|---|
+| `make up` | Start the gateway in detached mode |
+| `make down` | Stop and remove containers |
+| `make logs` | Follow gateway logs |
+| `make pull` | Pull the latest image |
+| `make cli` | Open an interactive CLI session |
+
+Runtime state (config, workspace, auth secrets) is stored in `.openclaw/` and `.openclaw-auth/` — both git-ignored.
 
 ## References
 
